@@ -1,7 +1,21 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const pool = require('./config/config')
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+app.route('/api/students').post((request, response) => {
+    let { name }  = request.body
+
+    pool.query('Insert into students (name) VALUES (?)',
+    [name], (err, res) => {
+        console.log(err);
+        response.send(res);
+    })
+})
 
 app.route('/').get((request, response) => {
     response.send('Hello world')
