@@ -17,6 +17,27 @@ app.route('/api/students').post((request, response) => {
     })
 })
 
+app.route('/api/students/:n_z').put((request, response) => {
+    let { surname } = request.body
+
+    pool.query(`Update students
+    SET surname = ?
+    WHERE n_z = ?`, [surname, request.params.n_z],
+    ((err, result) => {
+        if (err) console.log(err)
+        response.send(result);
+    }))
+})
+
+app.route('/api/students/:n_z').delete((request, response) => {
+    pool.query(`
+    Delete from students where n_z = ?`, [request.params.n_z],
+    ((err, result) => {
+        if (err) console.log(err)
+        response.send(result);
+    }))
+})
+
 app.route('/').get((request, response) => {
     response.send('Hello world')
 })
